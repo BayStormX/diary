@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Memories | Cloud Edition</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&family=Mali:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- พื้นหลังใส่รูปเขาเหมือนเดิม -->
+    <div class="background-image" style="background-image: url(https://adaymagazine.com/wp-content/uploads/2025/01/Web-01-100-1024x683.jpg);"></div>
+    <div class="overlay"></div>
+
+    <main class="container">
+        <header class="header">
+            <h1>☁️ Cloud Memory ☁️</h1>
+            <p>เก็บความทรงจำไว้บนท้องฟ้าไม่มีวันหาย</p>
+        </header>
+
+        <!-- ฟอร์มเพิ่มข้อมูล -->
+        <section class="add-memory-section glass-panel">
+            <h2>📝 บันทึกใหม่</h2>
+            <form id="memory-form">
+                <div class="input-group">
+                    <label>เลือกรูปภาพ</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="memory-image" accept="image/*" required>
+                        <span class="file-custom">จิ้มตรงนี้เพื่อเลือกรูป...</span>
+                    </div>
+                    <img id="image-preview" src="" alt="Preview" style="display: none;">
+                </div>
+
+                <div class="input-group">
+                    <label>วันที่บันทึก</label>
+                    <input type="date" id="memory-date" required>
+                </div>
+
+                <div class="input-group">
+                    <label>ความในใจ...</label>
+                    <textarea id="memory-text" rows="4" placeholder="วันนี้เป็นยังไงบ้าง..." required></textarea>
+                </div>
+
+                <!-- เพิ่มตัว Loading ตอนกำลังอัปโหลด -->
+                <button type="submit" id="btn-submit" class="btn-submit">💖 ส่งขึ้น Cloud</button>
+                <div id="loader" class="loader-text" style="display: none;">กำลังอัปโหลดความรัก... รอแป๊บน้า 🚀</div>
+            </form>
+        </section>
+
+        <!-- ส่วนแสดงผล -->
+        <section class="gallery-section">
+            <div class="gallery-header">
+                <h2>📸 แกลลอรี่ของเรา</h2>
+                <span class="memory-count">ทั้งหมด <span id="count">0</span> ความทรงจำ</span>
+            </div>
+            <div id="memory-grid" class="memory-grid">
+                <!-- โหลดข้อมูลจาก Firebase มาใส่ตรงนี้ -->
+            </div>
+        </section>
+    </main>
+
+    <!-- นำเข้า Firebase SDK (เวอร์ชัน 9+ แบบโมดูล) -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
