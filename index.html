@@ -1,65 +1,328 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Memories | Cloud Edition</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&family=Mali:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💌 ลับๆ ของฉัน</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Mitr:wght@300;400;500&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-    <!-- พื้นหลังใส่รูปเขาเหมือนเดิม -->
-    <div class="background-image" style="background-image: url(https://adaymagazine.com/wp-content/uploads/2025/01/Web-01-100-1024x683.jpg);"></div>
-    <div class="overlay"></div>
 
-    <main class="container">
-        <header class="header">
-            <h1>☁️ Cloud Memory ☁️</h1>
-            <p>เก็บความทรงจำไว้บนท้องฟ้าไม่มีวันหาย</p>
-        </header>
+  <!-- ===== BACKGROUND BLOBS ===== -->
+  <div class="bg-wrapper">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+    <div class="noise-overlay"></div>
+  </div>
 
-        <!-- ฟอร์มเพิ่มข้อมูล -->
-        <section class="add-memory-section glass-panel">
-            <h2>📝 บันทึกใหม่</h2>
-            <form id="memory-form">
-                <div class="input-group">
-                    <label>เลือกรูปภาพ</label>
-                    <div class="file-upload-wrapper">
-                        <input type="file" id="memory-image" accept="image/*" required>
-                        <span class="file-custom">จิ้มตรงนี้เพื่อเลือกรูป...</span>
-                    </div>
-                    <img id="image-preview" src="" alt="Preview" style="display: none;">
-                </div>
+  <!-- ===== CURSOR CUSTOM ===== -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
 
-                <div class="input-group">
-                    <label>วันที่บันทึก</label>
-                    <input type="date" id="memory-date" required>
-                </div>
+  <!-- ===== HEADER ===== -->
+  <header class="main-header" id="mainHeader">
+    <div class="header-inner">
+      <div class="header-logo">
+        <span class="logo-icon">🌿</span>
+        <span class="logo-text">ลับๆ ของฉัน</span>
+      </div>
+      <nav class="header-nav">
+        <button class="nav-btn active" id="navGallery" onclick="showSection('gallery')">
+          <span class="nav-icon">🖼️</span>
+          <span>แกลเลอรี</span>
+        </button>
+        <button class="nav-btn" id="navUpload" onclick="showSection('upload')">
+          <span class="nav-icon">📸</span>
+          <span>อัพรูป</span>
+        </button>
+        <button class="nav-btn" id="navProfile" onclick="showSection('profile')">
+          <span class="nav-icon">✨</span>
+          <span>โปรไฟล์</span>
+        </button>
+      </nav>
+      <div class="header-user" id="headerUser">
+        <div class="user-avatar" id="headerAvatar">?</div>
+        <span class="user-name" id="headerName">ยังไม่ได้ล็อกอิน</span>
+      </div>
+    </div>
+  </header>
 
-                <div class="input-group">
-                    <label>ความในใจ...</label>
-                    <textarea id="memory-text" rows="4" placeholder="วันนี้เป็นยังไงบ้าง..." required></textarea>
-                </div>
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content">
 
-                <!-- เพิ่มตัว Loading ตอนกำลังอัปโหลด -->
-                <button type="submit" id="btn-submit" class="btn-submit">💖 ส่งขึ้น Cloud</button>
-                <div id="loader" class="loader-text" style="display: none;">กำลังอัปโหลดความรัก... รอแป๊บน้า 🚀</div>
-            </form>
-        </section>
+    <!-- ======= SECTION: GALLERY ======= -->
+    <section class="section" id="sectionGallery">
+      <div class="section-header">
+        <h1 class="section-title">
+          <span class="title-main">ทั้งหมดเลย</span>
+          <span class="title-sub">รูปน่ารักๆ จากทุกคน 🌸</span>
+        </h1>
+        <div class="gallery-controls">
+          <div class="search-wrap">
+            <input type="text" class="search-input" id="searchInput" placeholder="ค้นหาจากชื่อ หรือข้อความ..." oninput="filterGallery()" />
+            <span class="search-icon">🔍</span>
+          </div>
+          <div class="filter-wrap">
+            <button class="filter-btn active" onclick="setFilter('all', this)">ทั้งหมด</button>
+            <button class="filter-btn" onclick="setFilter('mine', this)">ของฉัน</button>
+            <button class="filter-btn" onclick="setFilter('others', this)">ของคนอื่น</button>
+          </div>
+        </div>
+      </div>
 
-        <!-- ส่วนแสดงผล -->
-        <section class="gallery-section">
-            <div class="gallery-header">
-                <h2>📸 แกลลอรี่ของเรา</h2>
-                <span class="memory-count">ทั้งหมด <span id="count">0</span> ความทรงจำ</span>
+      <div class="gallery-stats" id="galleryStats">
+        <div class="stat-pill">
+          <span class="stat-num" id="statTotal">0</span>
+          <span class="stat-label">รูปทั้งหมด</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-num" id="statUsers">0</span>
+          <span class="stat-label">คนโพสต์</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-num" id="statToday">0</span>
+          <span class="stat-label">วันนี้</span>
+        </div>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- Cards injected here -->
+      </div>
+
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <div class="empty-illustration">🌿</div>
+        <p class="empty-title">ยังไม่มีรูปเลย</p>
+        <p class="empty-sub">เป็นคนแรกที่โพสต์เลยนะ! ✨</p>
+        <button class="btn-primary" onclick="showSection('upload')">อัพรูปเลย</button>
+      </div>
+    </section>
+
+    <!-- ======= SECTION: UPLOAD ======= -->
+    <section class="section hidden" id="sectionUpload">
+      <div class="upload-container">
+        <div class="upload-header">
+          <h1 class="section-title">
+            <span class="title-main">โพสต์รูปใหม่</span>
+            <span class="title-sub">บันทึกความทรงจำน่ารักๆ 💌</span>
+          </h1>
+        </div>
+
+        <div class="upload-card">
+          <!-- Drop Zone -->
+          <div class="drop-zone" id="dropZone"
+               onclick="document.getElementById('fileInput').click()"
+               ondragover="handleDragOver(event)"
+               ondragleave="handleDragLeave(event)"
+               ondrop="handleDrop(event)">
+            <div class="drop-zone-preview" id="dropPreview" style="display:none;">
+              <img id="previewImg" src="" alt="preview" />
+              <button class="remove-preview" onclick="removePreview(event)">✕</button>
             </div>
-            <div id="memory-grid" class="memory-grid">
-                <!-- โหลดข้อมูลจาก Firebase มาใส่ตรงนี้ -->
+            <div class="drop-zone-placeholder" id="dropPlaceholder">
+              <div class="drop-icon">🖼️</div>
+              <p class="drop-title">ลากรูปมาวางได้เลย</p>
+              <p class="drop-sub">หรือกดเพื่อเลือกรูป · JPG, PNG, WEBP</p>
             </div>
-        </section>
-    </main>
+          </div>
+          <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleFileSelect(event)" />
 
-    <!-- นำเข้า Firebase SDK (เวอร์ชัน 9+ แบบโมดูล) -->
-    <script type="module" src="script.js"></script>
+          <!-- Form Fields -->
+          <div class="form-fields">
+            <div class="form-group">
+              <label class="form-label">ชื่อของเขา/เธอ 💕</label>
+              <input type="text" class="form-input" id="personName" placeholder="เช่น นายแดง, หนุ่มบัญชี ฯลฯ" maxlength="50" />
+              <span class="char-count" id="nameCount">0/50</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">เขียนอะไรก็ได้ที่อยากบอก 📝</label>
+              <textarea class="form-textarea" id="postMessage" placeholder="วันนี้เจอเขาที่ลิฟต์ แล้วเขายิ้มให้... ละลายเลย 🥺" maxlength="300" oninput="updateMessageCount()"></textarea>
+              <span class="char-count" id="messageCount">0/300</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">วันที่ในความทรงจำ 📅</label>
+              <input type="date" class="form-input" id="postDate" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">แท็กอารมณ์ 🎭</label>
+              <div class="mood-tags" id="moodTags">
+                <button class="mood-tag" onclick="toggleMood(this)" data-mood="😍">😍 ชอบมาก</button>
+                <button class="mood-tag" onclick="toggleMood(this)" data-mood="🥺">🥺 ละลาย</button>
+                <button class="mood-tag" onclick="toggleMood(this)" data-mood="💘">💘 ปั๊บ</button>
+                <button class="mood-tag" onclick="toggleMood(this)" data-mood="🌸">🌸 อ่อนโยน</button>
+                <button class="mood-tag" onclick="toggleMood(this)" data-mood="✨">✨ วิบวับ</button>
+                <button class="mood-tag" onclick="toggleMood(this)" data-mood="🫶">🫶 อบอุ่น</button>
+                <button class="mood-tag" onclick="toggleMood(this)" data-mood="🤭">🤭 ขำ</button>
+                <button class="mood-tag" onclick="toggleMood(this)" data-mood="💚">💚 มิ้นต์</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">โพสต์แบบ</label>
+              <div class="visibility-toggle">
+                <button class="vis-btn active" id="visBtnPublic" onclick="setVisibility('public')">
+                  🌍 ให้คนอื่นเห็นด้วย
+                </button>
+                <button class="vis-btn" id="visBtnPrivate" onclick="setVisibility('private')">
+                  🔒 เฉพาะฉันเอง
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-secondary" onclick="resetForm()">เริ่มใหม่</button>
+            <button class="btn-primary" onclick="submitPost()" id="submitBtn">
+              <span class="btn-text">โพสต์เลย 💌</span>
+              <div class="btn-loader" style="display:none;">⏳</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= SECTION: PROFILE ======= -->
+    <section class="section hidden" id="sectionProfile">
+      <div class="profile-container">
+
+        <!-- Login/Register -->
+        <div class="auth-card" id="authCard">
+          <div class="auth-header">
+            <h2 class="auth-title">เข้าสู่ระบบ ✨</h2>
+            <p class="auth-sub">ตั้งชื่อให้ตัวเองก่อนนะ แล้วก็โพสต์รูปได้เลย</p>
+          </div>
+          <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">เข้าสู่ระบบ</button>
+            <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">สมัครใหม่</button>
+          </div>
+
+          <!-- Login Form -->
+          <div id="loginForm">
+            <div class="form-group">
+              <label class="form-label">ชื่อผู้ใช้</label>
+              <input type="text" class="form-input" id="loginUsername" placeholder="ชื่อที่ตั้งไว้" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">รหัสผ่าน</label>
+              <input type="password" class="form-input" id="loginPassword" placeholder="••••••" />
+            </div>
+            <button class="btn-primary full-width" onclick="loginUser()">เข้าสู่ระบบ 🌿</button>
+          </div>
+
+          <!-- Register Form -->
+          <div id="registerForm" style="display:none;">
+            <div class="form-group">
+              <label class="form-label">ตั้งชื่อผู้ใช้</label>
+              <input type="text" class="form-input" id="regUsername" placeholder="ชื่อน่ารักๆ" maxlength="20" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">ตั้งรหัสผ่าน</label>
+              <input type="password" class="form-input" id="regPassword" placeholder="••••••" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">เลือก Emoji ประจำตัว</label>
+              <div class="emoji-picker" id="emojiPicker">
+                <span class="emoji-option selected" onclick="selectEmoji(this)">🌿</span>
+                <span class="emoji-option" onclick="selectEmoji(this)">🌸</span>
+                <span class="emoji-option" onclick="selectEmoji(this)">💚</span>
+                <span class="emoji-option" onclick="selectEmoji(this)">🍃</span>
+                <span class="emoji-option" onclick="selectEmoji(this)">🌱</span>
+                <span class="emoji-option" onclick="selectEmoji(this)">🐸</span>
+                <span class="emoji-option" onclick="selectEmoji(this)">🍵</span>
+                <span class="emoji-option" onclick="selectEmoji(this)">🎋</span>
+                <span class="emoji-option" onclick="selectEmoji(this)">🌾</span>
+                <span class="emoji-option" onclick="selectEmoji(this)">🐢</span>
+                <span class="emoji-option" onclick="selectEmoji(this)">🦋</span>
+                <span class="emoji-option" onclick="selectEmoji(this)">🌊</span>
+              </div>
+            </div>
+            <button class="btn-primary full-width" onclick="registerUser()">สมัครเลย ✨</button>
+          </div>
+        </div>
+
+        <!-- Profile Card (shown after login) -->
+        <div class="profile-card" id="profileCard" style="display:none;">
+          <div class="profile-hero">
+            <div class="profile-avatar-big" id="profileAvatarBig">🌿</div>
+            <h2 class="profile-username" id="profileUsername">ชื่อผู้ใช้</h2>
+            <p class="profile-joined" id="profileJoined">เข้าร่วมเมื่อ...</p>
+          </div>
+          <div class="profile-stats-row">
+            <div class="profile-stat">
+              <span class="pstat-num" id="myPostCount">0</span>
+              <span class="pstat-label">รูปของฉัน</span>
+            </div>
+            <div class="profile-stat">
+              <span class="pstat-num" id="myPublicCount">0</span>
+              <span class="pstat-label">สาธารณะ</span>
+            </div>
+            <div class="profile-stat">
+              <span class="pstat-num" id="myPrivateCount">0</span>
+              <span class="pstat-label">ส่วนตัว</span>
+            </div>
+          </div>
+          <div class="my-posts-section">
+            <h3 class="my-posts-title">รูปของฉัน 🖼️</h3>
+            <div class="gallery-grid mini" id="myPostsGrid"></div>
+          </div>
+          <button class="btn-logout" onclick="logoutUser()">ออกจากระบบ 👋</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== LIGHTBOX MODAL ===== -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      <div class="lightbox-content">
+        <div class="lightbox-img-wrap">
+          <img class="lightbox-img" id="lightboxImg" src="" alt="" />
+        </div>
+        <div class="lightbox-info">
+          <div class="lb-user">
+            <span class="lb-avatar" id="lbAvatar"></span>
+            <span class="lb-username" id="lbUsername"></span>
+          </div>
+          <h3 class="lb-person" id="lbPerson"></h3>
+          <p class="lb-message" id="lbMessage"></p>
+          <div class="lb-meta">
+            <span class="lb-date" id="lbDate"></span>
+            <span class="lb-mood" id="lbMood"></span>
+          </div>
+          <button class="lb-delete-btn" id="lbDeleteBtn" onclick="deletePostFromLightbox()" style="display:none;">
+            🗑️ ลบรูปนี้
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST NOTIFICATION ===== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ===== LOGIN PROMPT MODAL ===== -->
+  <div class="modal-overlay" id="loginPrompt" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-icon">🔒</div>
+      <h3 class="modal-title">ต้องล็อกอินก่อนนะ!</h3>
+      <p class="modal-sub">เข้าสู่ระบบเพื่อโพสต์รูปได้เลย ง่ายมาก</p>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeLoginPrompt()">ยกเลิก</button>
+        <button class="btn-primary" onclick="goToProfile()">ไปล็อกอิน 🌿</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
